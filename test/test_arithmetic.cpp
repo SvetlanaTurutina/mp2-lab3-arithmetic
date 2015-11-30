@@ -45,4 +45,19 @@ TEST(TArithmetic, check_operands_return_false_if_they_stand_before_brackets)
 	char s[] = "5+3*c(a+b)";
 	EXPECT_EQ(0, CheckOperandBracketStandTogether(s));
 }
+TEST(TArithmetic, Partition_Into_Tokens)
+{
+	char s[] = "3.2+c-d";
+	PartitionIntoTokens(s);
+}
+TEST(TArithmetic, priority)
+{
+	char s = '+';
+	EXPECT_EQ(2, Priority(s));
+}
+TEST(TArithmetic, To_Polish)
+{
+	char s[] = "32 + c - d";
+	ToPolish(s);
+}
 

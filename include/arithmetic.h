@@ -11,3 +11,6 @@ bool CheckOperations(char* s);
 bool CheckOperandsStandTogether(char* s);  // проверка операндов
 bool CheckOperationsStandTogether(char* s); // проверка операций
 bool CheckOperandBracketStandTogether(char* s);
+void PartitionIntoTokens(char *s);
+int Priority(char ch);
+void ToPolish(char *s);
