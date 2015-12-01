@@ -60,4 +60,9 @@ TEST(TArithmetic, To_Polish)
 	char s[] = "32 + c - d";
 	ToPolish(s);
 }
+TEST(TArithmetic, Polish_Result)
+{
+	char s[] = "a b -";
+	PolishFindResult(s);
+}
 

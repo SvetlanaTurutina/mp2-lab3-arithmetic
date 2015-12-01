@@ -1,4 +1,6 @@
-#include "arithmetic.h"  
+#include "arithmetic.h" 
+#include <stdio.h>
+#include <stdlib.h>
 
 bool CheckBrackets(char* s)  // проверка скобок
 {
@@ -268,4 +270,70 @@ void ToPolish(char *s)
 
 	for (int j = 0; j < strlen(c); j++)
 		cout << c[j];
+}
+
+void PolishFindResult(char *s)
+{
+	int i = 0;
+	string lexem;
+	TStack<double> op(30);
+	double res, a, b, c;
+
+	for (int i = 0; i < strlen(s); i++)
+	{
+		if ((s[i] == '+') || (s[i] == '-') || (s[i] == '*') || (s[i] == '/'))
+		{
+			if (s[i] == '+')
+			{
+				a = op.GetDelTopElem();
+				b = op.GetDelTopElem();
+				c = a + b;
+				op.Put(c);
+			}
+			if (s[i] == '-')
+			{
+				a = op.GetDelTopElem();
+				b = op.GetDelTopElem();
+				c = b - a;
+				op.Put(c);
+			}
+			if (s[i] == '*')
+			{
+				a = op.GetDelTopElem();
+				b = op.GetDelTopElem();
+				c = a * b;
+				op.Put(c);
+			}
+			if (s[i] == '/')
+			{
+				a = op.GetDelTopElem();
+				b = op.GetDelTopElem();
+				c = b / a;
+				op.Put(c);
+			}
+		}
+		else if (s[i] != ' ')
+		{
+			if (isalpha(s[i]))
+			{
+				cout << "Enter value of variable\n";
+				cin >> a;//scanf("%f", &a);
+				op.Put(a);
+			}
+			else 
+			{
+				lexem = lexem + s[i];
+				a = stod(lexem);
+				op.Put(a);
+				if (s[i + 1] == ' ')
+				{
+					lexem = ""; // clear string
+					continue;
+				}
+			}
+	
+		}
+	}
+	res = op.GetDelTopElem();
+	cout << res;
 }
