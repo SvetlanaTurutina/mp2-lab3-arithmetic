@@ -13,5 +13,5 @@ bool CheckOperationsStandTogether(char* s); // проверка операций
 bool CheckOperandBracketStandTogether(char* s);
 void PartitionIntoTokens(char *s);
 int Priority(char ch);
-void ToPolish(char *s);
-void PolishFindResult(char *s);
+void ToPolish(char *s, char *c);
+double PolishFindResult(char *s);

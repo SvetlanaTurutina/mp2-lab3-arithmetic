@@ -16,7 +16,7 @@ bool CheckBrackets(char* s)  // проверка скобок
 			if (br.IsEmpty())
 			{
 				res = 0;
-				cout << "Error. Irrelevant closing bracket in position " << i;
+				cout << "Error. Irrelevant closing bracket in position " << i << "\n";
 				break;
 			}
 			else
@@ -27,9 +27,10 @@ bool CheckBrackets(char* s)  // проверка скобок
 	if (br.IsEmpty() != 1)
 	{
 		res = 0;
-		cout << "Error. Irrelevant opening bracket in position " << br.GetTopElem();
+		cout << "Error. Irrelevant opening bracket in position " << br.GetTopElem() << "\n";
 	}
 
+	cout << res;
 	return res;
 }
 
@@ -43,18 +44,19 @@ bool CheckOperations(char* s)
 	{
 		if (s[0] == operation[i])
 		{
-			cout << "Error. Expression starts with operation sign";
+			cout << "Error. Expression starts with operation sign\n";
 			res = 0;
 			break;
 		}
 		if (s[len - 1] == operation[i])
 		{
-			cout << "Error. Expression ends with operation sign";
+			cout << "Error. Expression ends with operation sign\n";
 			res = 0;
 			break;
 		}
 	}
 	
+	cout << res;
 	return res;
 }
 
@@ -71,12 +73,14 @@ bool CheckOperationsStandTogether(char* s)
 			for (int j = 0; j < 3; j++)
 			if (s[i + 1] == operation[j])
 			{
-				cout << "Error. Operations stand one after another in positions " << i << " & " << i+1;
+				cout << "Error. Operations stand one after another in positions " << i << " & " << i + 1 << "\n";
 				res = 0;
 				break;
 			}
 		}
 	}
+
+	cout << res;
 	return res;
 }
 bool CheckOperandsStandTogether(char* s)
@@ -92,12 +96,14 @@ bool CheckOperandsStandTogether(char* s)
 			for (int j = 0; j < 25; j++)
 				if (s[i + 1] == operand[j])
 				{
-					cout << "Error. Operands stand one after another in positions " << i << " & " << i + 1;
+					cout << "Error. Operands stand one after another in positions " << i << " & " << i + 1 << "\n";
 					res = 0;
 					break;
 				}
 		}
 	}
+
+	cout << res;
 	return res;
 }
 bool CheckOperandBracketStandTogether(char* s)
@@ -110,18 +116,20 @@ bool CheckOperandBracketStandTogether(char* s)
 		for (int j = 0; j < 25; j++)
 		if ((s[i] == operand[j])&&(s[i + 1] == '('))
 			{
-				cout << "Error. Operand stands before bracket in position " << i;
+			cout << "Error. Operand stands before bracket in position " << i << "\n";
 				res = 0;
 				break;
 			}
 		for (int j = 0; j < 25; j++)
 		if ((s[i] == ')') && (s[i + 1] == operand[j]))
 		{
-			cout << "Error. Operand stands after bracket in position " << i+1;
+			cout << "Error. Operand stands after bracket in position " << i+1 << "\n";
 			res = 0;
 			break;
 		}
 	}
+
+	cout << res;
 	return res;
 }
 
@@ -214,13 +222,14 @@ int Priority(char ch)
 		res = 3;
 	return res;
 }
-void ToPolish(char *s)
+void ToPolish(char *s, char *c)
 {
 	int i, j = 0;
 	TStack<char> op(30);
-	char c[256]; // output string
+	//char c[256]; // output string
 
-	for (int i = 0; i < strlen(s); i++)
+	int len = strlen(s);
+	for (int i = 0; i < len; i++)
 	{
 		if ((s[i] == '+') || (s[i] == '-') || (s[i] == '*') || (s[i] == '/'))
 		{
@@ -230,7 +239,7 @@ void ToPolish(char *s)
 			{
 				c[j] = op.GetTopElem();
 				j++;
-				op.GetDelTopElem(); // break
+				op.GetDelTopElem(); 
 				if (op.IsEmpty())
 				{
 					op.Put(s[i]);
@@ -239,9 +248,9 @@ void ToPolish(char *s)
 					
 			}
 		}
-		if (s[i] == '(') 
+		else if (s[i] == '(') 
 			op.Put(s[i]);
-		if (s[i] == ')')
+		else if (s[i] == ')')
 		{
 			while (op.GetTopElem() != '(')
 			{
@@ -249,18 +258,31 @@ void ToPolish(char *s)
 				j++;
 				op.GetDelTopElem();
 			}
-			//op.GetDelTopElem();
+			if (op.GetTopElem() == '(')
+				op.GetDelTopElem();
 		}
-		if ((s[i] != '+') && (s[i] != '-') && (s[i] != '*') && (s[i] != '/') && (s[i] != '(') && (s[i] != ')'))
+		else //if ((s[i] != '+') || (s[i] != '-') || (s[i] != '*') || (s[i] != '/')||(s[i] != '(')||(s[i] != ')'))//(isdigit(s[i])) || (isalpha(s[i])))
 		{
 			c[j] = s[i];
 			j++;
+			if (i < len - 1) 
+			{
+				if ((isdigit(s[i + 1]) == 0) && (s[i + 1]!='.'))
+				{
+					c[j] = ' ';
+					j++;
+				}
+			}
+			else
+			{
+					c[j] = ' ';
+					j++;
+			}
 		}
-		
 		   
 	}
 	
-	//if (i == strlen(s))
+	
 	    while (op.IsEmpty() != true)
 	    {
 		   c[j] = op.GetDelTopElem();
@@ -272,12 +294,13 @@ void ToPolish(char *s)
 		cout << c[j];
 }
 
-void PolishFindResult(char *s)
+double PolishFindResult(char *s)
 {
 	int i = 0;
 	string lexem;
 	TStack<double> op(30);
 	double res, a, b, c;
+	bool e=0;
 
 	for (int i = 0; i < strlen(s); i++)
 	{
@@ -323,17 +346,21 @@ void PolishFindResult(char *s)
 			else 
 			{
 				lexem = lexem + s[i];
-				a = stod(lexem);
-				op.Put(a);
+				//a = stod(lexem);
+				//op.Put(a);
 				if (s[i + 1] == ' ')
 				{
+					a = stod(lexem);
+					op.Put(a);
 					lexem = ""; // clear string
 					continue;
 				}
 			}
-	
 		}
 	}
+	
 	res = op.GetDelTopElem();
-	cout << res;
+	if (op.IsEmpty())
+		e = 1;
+	return res;
 }
